@@ -64,6 +64,13 @@ insta-cmd = "0.6.0"
 rayon = "1.10.0"
 trustfall_core = "0.8.1"  # Ensure this matches the `trustfall` version above.
 
+
+[patch.crates-io]
+trustfall = { path = "../trustfall/trustfall" }
+trustfall_rustdoc = { path = "../trustfall-rustdoc" }
+trustfall_core = { path = "../trustfall/trustfall_core" }
+
+
 # In dev and test profiles, compile all dependencies with optimizations enabled,
 # but still checking debug assertions and overflows.
 #
