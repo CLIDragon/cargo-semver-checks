@@ -92,6 +92,11 @@ codegen-units = 16
 lto = true
 codegen-units = 1
 
+# Use profiling settings recommended by samply (https://github.com/mstange/samply)
+[profile.profiling]
+inherits = "release"
+debug = true
+
 [features]
 default = ["gix-reqwest"]
 
