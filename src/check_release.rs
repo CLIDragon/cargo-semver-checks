@@ -251,6 +251,7 @@ pub(super) fn run_check_release(
     witness_generation: &WitnessGeneration,
     witness_data: witness_gen::WitnessGenerationData,
 ) -> anyhow::Result<CrateReport> {
+    let _span = tracy_client::span!();
     let current_version = data_storage.current_crate().crate_version();
     let baseline_version = data_storage.baseline_crate().crate_version();
 
@@ -343,6 +344,7 @@ pub(super) fn run_check_release(
     let lint_results = queries_to_run
         .into_par_iter()
         .map(|(_, semver_query)| {
+            let _span = tracy_client::non_continuous_frame!("Run Query");
             let start_instant = std::time::Instant::now();
             // trustfall::execute_query(...) -> dyn Iterator (without Send)
             // thus the result must be collect()'ed
@@ -350,6 +352,8 @@ pub(super) fn run_check_release(
                 .run_query(&semver_query.query, semver_query.arguments.clone())?
                 .collect_vec();
             let query_duration = start_instant.elapsed();
+            // Force the tracy client to end the frame here.
+            drop(_span);
             Ok(LintResult {
                 effective_required_update: overrides.effective_required_update(&semver_query),
                 effective_lint_level: overrides.effective_lint_level(&semver_query),
