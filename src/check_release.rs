@@ -236,6 +236,7 @@ pub(super) fn run_check_release(
     overrides: &OverrideStack,
     witness_generation: &WitnessGeneration,
 ) -> anyhow::Result<CrateReport> {
+    let _span = tracy_client::span!();
     let current_version = data_storage.current_crate().crate_version();
     let baseline_version = data_storage.baseline_crate().crate_version();
 
@@ -331,6 +332,7 @@ pub(super) fn run_check_release(
     let all_results = queries_to_run
         .par_iter()
         .map(|semver_query| {
+            let _span = tracy_client::non_continuous_frame!("Run Query");
             let start_instant = std::time::Instant::now();
             // trustfall::execute_query(...) -> dyn Iterator (without Send)
             // thus the result must be collect()'ed
@@ -338,6 +340,8 @@ pub(super) fn run_check_release(
                 .run_query(&semver_query.query, semver_query.arguments.clone())?
                 .collect_vec();
             let time_to_decide = start_instant.elapsed();
+            // Force the tracy client to end the frame here.
+            drop(_span);
             Ok((semver_query, time_to_decide, results))
         })
         .collect::<anyhow::Result<Vec<_>>>()?;

@@ -13,6 +13,7 @@ pub(crate) struct Manifest {
 
 impl Manifest {
     pub(crate) fn parse(path: std::path::PathBuf) -> anyhow::Result<Self> {
+        let _span = tracy_client::span!();
         // Parsing via `cargo_toml::Manifest::from_path()` is preferable to parsing from a string,
         // because inspection of surrounding files is sometimes necessary to determine
         // the existence of lib targets and ensure proper handling of workspace inheritance.

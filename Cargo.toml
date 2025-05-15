@@ -20,6 +20,9 @@ trustfall = "0.8.1"  # Ensure this matches the `trustfall_core` dev-dependency v
 # so ensure the version we use for `cargo_metadata` here matches what `trustfall_rustdoc` uses too.
 trustfall_rustdoc = { version = "0.23.1", default-features = false, features = ["v37", "v39", "v43", "v45", "rayon", "rustc-hash"] }
 cargo_metadata = "0.19.1"
+# ["enable", "system-tracing", "context-switch-tracing", "sampling", "code-transfer",
+#            "broadcast", "callstack-inlines", "crash-handler", "flush-on-exit"]
+tracy-client = { version = "0.18.0", features = ["flush-on-exit", "delayed-init"] }
 # End of dependency block
 
 clap = { version = "4.5.26", features = ["derive", "cargo"] }
@@ -63,6 +66,9 @@ regex = "1.11.1"
 insta-cmd = "0.6.0"
 rayon = "1.10.0"
 trustfall_core = "0.8.1"  # Ensure this matches the `trustfall` version above.
+# ["enable", "system-tracing", "context-switch-tracing", "sampling", "code-transfer",
+#            "broadcast", "callstack-inlines", "crash-handler", "flush-on-exit"]
+tracy-client = { version = "0.18.0", features = ["flush-on-exit", "delayed-init"] }
 
 
 [patch.crates-io]

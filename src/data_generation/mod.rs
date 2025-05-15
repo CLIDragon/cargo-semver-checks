@@ -32,6 +32,7 @@ impl DataStorage {
 
 impl DataStorage {
     pub(crate) fn create_indexes(&self) -> IndexStorage<'_> {
+        let _span = tracy_client::span!("create_indexes");
         IndexStorage {
             current_crate: VersionedIndex::from_storage(&self.current),
             baseline_crate: VersionedIndex::from_storage(&self.baseline),
@@ -47,6 +48,7 @@ pub(crate) struct IndexStorage<'a> {
 
 impl IndexStorage<'_> {
     pub(crate) fn create_adapter(&self) -> VersionedRustdocAdapter {
+        let _span = tracy_client::span!("create_adapter");
         VersionedRustdocAdapter::new(&self.current_crate, Some(&self.baseline_crate))
             .expect("failed to construct adapter, this is a bug and should never happen")
     }
